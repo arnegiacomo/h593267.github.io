@@ -59,8 +59,8 @@ export default class App {
         this.renderer.render(this.scene, this.camera);
         //window.requestAnimationFrame(this.render.bind(this));
 
-        this.controls.movementSpeed = 10;
-        this.controls.update( delta );
+        this.controls.movementSpeed = 1;
+        this.controls.update( this.controls.movementSpeed * delta );
     }
 
 }
