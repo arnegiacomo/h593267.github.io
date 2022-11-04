@@ -38,6 +38,100 @@ and is wrapped around the whole page content, except for the footer in this exam
       <div class="w3-row">
         <!-- Blog entries -->
         <div class="w3-col l8 s12">
+          <!-- DAG 24 -->
+          <div class="w3-card-4 w3-margin w3-white">
+            <img src="images/tekken.png" alt="" style="width: 100%" />
+            <!-- Optional image here -->
+            <div class="w3-container">
+              <h3><b>Dag 24</b><a id="24"></a></h3>
+              <h5>
+                <span class="w3-opacity"
+                  >2022.11.03 | Torsdag | 08:00 - 21:00</span
+                >
+              </h5>
+            </div>
+
+            <div class="w3-container">
+              <p>
+                I dag var litt av en dag. Dagen startet med et vanlig standup
+                møte, der gruppen gikk gjennom status på de ulike JIRA-taskene
+                vi holder på med ☑️. Jeg skulle ønske det var mer synlig
+                fremgang for meg, men det går ikke alltid like linært som jeg
+                hadde håpet 📉. Etter dette tok jeg på detektivbrillene 🧐 🕵️ og
+                lette etter grunnen til hvorfor applikasjonen fra tirsdag alltid
+                stengte seg selv ned. Dette tok i utgangspunktet litt for lang
+                tid, men etter noen timer med leting og knoting, fant jeg til
+                slutt ut hva feilen var. Openshift plattformen vi bruker sender
+                jevnlige http kall til applikasjonen for å sjekke dens "helse"
+                💔 💛 💚, om den ikke får noe svar så vil den prøve å restarte
+                applikasjonen fordi da antar openshift at det er noe galt med
+                den, siden den ikke responderer. Jeg fant til slutt ut at
+                grunnen til at openshift trodde det var noe galt, var at
+                applikasjonen "rejected" alt av http kall, og aksepterte kun
+                https. Etter jeg åpnet opp for jevnlige "helsesjekker" 👩‍⚕️ så
+                kjørte den endelig! Det har tatt mange uker å få denne til å
+                kjøre i openshift, og nå er vi et steg nærmere prodsetting.
+                <br />
+                Etter arbeidsdagen tok teamet en drosje til Bryggeloftet, der vi
+                hadde en flott middag sammen. Vi ble litt mer kjente med
+                hverandre, utenom jobb sammenheng, og hadde deilig mat 🍖 og
+                noen øl 🍺. Etter bryggeloftet dro vi på Gimmick bar og spilte
+                litt arkadespill med/mot hverandre 🎮. Vi hadde en liten
+                miniturnering i CatchTheLight, som var en slags "wack-a-mole",
+                der man spilte mot hverandre og prøvde å få flest mulige poeng
+                før tiden løp ut. Jeg vant turneringen, med en ørliten margin.
+                Det var faktisk utrolig hvor jevnt de ulike "matchupene" var 💡.
+                Utenom det så gikk det mye i tekken, pong, pinball og litt mer
+                oldschool nintendo arkadespill.
+              </p>
+            </div>
+
+            <div class="w3-container">
+              <h5>
+                Arbeidet i dag:
+                <span class="w3-opacity">8 timer jobb | 5 timer sosialt</span>
+              </h5>
+            </div>
+          </div>
+
+          <!-- DAG 23 -->
+          <div class="w3-card-4 w3-margin w3-white">
+            <img src="" alt="" style="width: 100%" />
+            <!-- Optional image here -->
+            <div class="w3-container">
+              <h3><b>Dag 23</b><a id="23"></a></h3>
+              <h5>
+                <span class="w3-opacity"
+                  >2022.11.01 | Tirsdag | 08:00 - 16:00</span
+                >
+              </h5>
+            </div>
+
+            <div class="w3-container">
+              <p>
+                I dag begynte Sondre på teamet! Han er nyansatt fra Experis
+                Academy, så det betyr at jeg ikke lenger er den "grønneste" på
+                teamet 🌱, men i teknisk kompetanse er jeg nok fremdeles det.
+                Resten av dagen brukte jeg i utgangspunktet på koding, jeg
+                nærmer meg slutt her og må prøve å få det siste jeg jobber med
+                ut i produksjon, så jeg jobber på spreng for å få alt opp i
+                skyen. Etter å bytte logger, ordne opp i config og koble til
+                riktige mq-køer så klarte jeg til slutt å få applikasjonen til å
+                "kjøre" i skyen ☁️, men av en eller annen grunn så stengte den
+                seg selv ned etter et døyt minutt, hver gang den kjørte 🌧️. Den
+                hverken kræsjet eller møtte på feil, den bare stengte seg selv
+                ned. På dette tidspunktet hadde egentlig hele arbeidsdagen gått,
+                og nå måtte jeg gruble på problemet frem til torsdag 🤔.
+              </p>
+            </div>
+
+            <div class="w3-container">
+              <h5>
+                Arbeidet i dag: <span class="w3-opacity">8 timer jobb</span>
+              </h5>
+            </div>
+          </div>
+
           <!-- DAG 22 -->
           <div class="w3-card-4 w3-margin w3-white">
             <img src="" alt="" style="width: 100%" />
@@ -815,7 +909,7 @@ and is wrapped around the whole page content, except for the footer in this exam
           <div class="w3-card w3-margin">
             <div class="w3-container w3-padding">
               <h4>
-                Totalt antall timer jobbet: <span class="w3-tag">178</span>
+                Totalt antall timer jobbet: <span class="w3-tag">192</span>
               </h4>
             </div>
           </div>
@@ -868,6 +962,10 @@ and is wrapped around the whole page content, except for the footer in this exam
               <a href="#21">Dag 21</a>
               <br />
               <a href="#22">Dag 22</a>
+              <br />
+              <a href="#23">Dag 23</a>
+              <br />
+              <a href="#24">Dag 24</a>
             </div>
           </div>
           <hr />
