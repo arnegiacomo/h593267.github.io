@@ -6,109 +6,116 @@ import TerrainGeometry from "./TerrainGeometry.js";
 import ObjectLoader from "../../ObjectLoader.js";
 
 export default class Terrain {
+  loaded = false;
 
-    loaded = false;
+  constructor(scene) {
+    const terrainImage = new Image();
+    terrainImage.onload = () => {
+      this.size = 128;
+      this.heightwidth = 20;
+      this.height = 5;
 
-    constructor(scene) {
-        const terrainImage = new Image();
-        terrainImage.onload = () => {
+      this.geometry = new TerrainGeometry(
+        this.heightwidth,
+        this.size,
+        this.height,
+        terrainImage
+      );
 
-            this.size = 128;
-            this.heightwidth = 20;
-            this.height = 5;
+      const grass = new THREE.TextureLoader().load(
+        "../../IMAGIN3D/assets/images/grass.png"
+      );
+      const rock = new THREE.TextureLoader().load(
+        "../../IMAGIN3D/assets/images/rock.png"
+      );
+      const alphaMap = new THREE.TextureLoader().load(
+        "../../IMAGIN3D/assets/images/terrain.png"
+      );
 
-            this.geometry = new TerrainGeometry(this.heightwidth, this.size, this.height, terrainImage);
+      grass.wrapS = THREE.RepeatWrapping;
+      grass.wrapT = THREE.RepeatWrapping;
 
-            const grass = new THREE.TextureLoader().load('../../assets/images/grass.png');
-            const rock = new THREE.TextureLoader().load('../../assets/images/rock.png');
-            const alphaMap = new THREE.TextureLoader().load('../../assets/images/terrain.png');
+      grass.repeat.multiplyScalar(this.size / 8);
 
-            grass.wrapS = THREE.RepeatWrapping;
-            grass.wrapT = THREE.RepeatWrapping;
+      rock.wrapS = THREE.RepeatWrapping;
+      rock.wrapT = THREE.RepeatWrapping;
 
-            grass.repeat.multiplyScalar(this.size / 8);
+      rock.repeat.multiplyScalar(this.size / 8);
 
-            rock.wrapS = THREE.RepeatWrapping;
-            rock.wrapT = THREE.RepeatWrapping;
+      this.material = new TextureSplattingMaterial({
+        color: THREE.Color.NAMES.white,
+        colorMaps: [grass, rock],
+        alphaMaps: [alphaMap],
+      });
 
-            rock.repeat.multiplyScalar(this.size / 8);
+      this.mesh = new THREE.Mesh(this.geometry, this.material);
+      this.mesh.isTerrain = true;
+      this.mesh.size = this.size;
+      this.mesh.receiveShadow = true;
 
-            this.material = new TextureSplattingMaterial({
-                color: THREE.Color.NAMES.white,
-                colorMaps: [grass, rock],
-                alphaMaps: [alphaMap]
-            });
+      scene.add(this.mesh);
+      this.loaded = true;
 
-            this.mesh = new THREE.Mesh(this.geometry, this.material);
-            this.mesh.isTerrain = true;
-            this.mesh.size = this.size;
-            this.mesh.receiveShadow = true;
+      // Grass
 
-            scene.add(this.mesh);
-            this.loaded = true;
+      const map = new THREE.TextureLoader().load(
+        "../../IMAGIN3D/assets/images/GrassSprite.png"
+      );
+      const material = new THREE.SpriteMaterial({ map: map, color: 0xffffff });
+      const stepsize = 4;
+      this.mesh.grassSize = 32;
+      let index = 0;
+      this.mesh.stepsize = stepsize;
 
-            // Grass
+      this.mesh.grassArray = new Array(
+        this.mesh.grassSize * this.mesh.grassSize
+      );
+      for (let i = 0; i < this.size; i += stepsize) {
+        for (let j = 0; j < this.size; j += stepsize) {
+          const sprite = new THREE.Sprite(material);
 
-            const map = new THREE.TextureLoader().load( '../../assets/images/GrassSprite.png');
-            const material = new THREE.SpriteMaterial( { map: map, color: 0xffffff } );
-            const stepsize = 4;
-            this.mesh.grassSize = 32;
-            let index = 0;
-            this.mesh.stepsize = stepsize;
+          sprite.scale.set(0.6, 0.4, 0.4);
+          let y = this.mesh.geometry.data[i * this.size + j];
+          sprite.translateX(
+            (j / this.size) * this.heightwidth - this.heightwidth / 2
+          );
+          sprite.translateZ(
+            (i / this.size) * this.heightwidth - this.heightwidth / 2
+          );
+          sprite.translateY(y * this.height + 0.1);
+          this.mesh.add(sprite);
 
-            this.mesh.grassArray = new Array(this.mesh.grassSize * this.mesh.grassSize);
-            for (let i = 0; i < this.size; i += stepsize) {
-                for (let j = 0; j < this.size; j += stepsize) {
+          sprite.visible = !(sprite.position.y < 0.2 || sprite.position.y > 3);
 
-                    const sprite = new THREE.Sprite( material );
-
-                    sprite.scale.set(0.6, 0.4, 0.4)
-                    let y = this.mesh.geometry.data[i*this.size + j];
-                    sprite.translateX((j /this.size)*this.heightwidth  - this.heightwidth/2)
-                    sprite.translateZ((i /this.size)*this.heightwidth- this.heightwidth/2)
-                    sprite.translateY(y * this.height + 0.1);
-                    this.mesh.add( sprite );
-
-                    sprite.visible = !(sprite.position.y < 0.2 || sprite.position.y > 3);
-
-                    this.mesh.grassArray[index] = sprite;
-                    index ++;
-                }
-            }
-
-            // Load all objects into scene
-            const loader = new ObjectLoader();
-            this.trees = loader.init(this.mesh);
-
-            this.loaded = true;
-
-        };
-        terrainImage.src = '../assets/images/terrain.png';
-
-
-    }
-
-    num = 0;
-
-    update(dt) {
-
-        if(!this.loaded) return;
-
-        for(let i = 0; i < this.trees.length; i++) {
-            const tree = this.trees[i];
-            if(tree === undefined) return;
-            for(let i = 0; i < tree.children.length; i++) {
-                const leaf = tree.children[i];
-
-                leaf.material.rotation += dt * Math.sin(this.num) / 100;
-                this.num += dt;
-                leaf.material.needsUpdate = true;
-            }
-
+          this.mesh.grassArray[index] = sprite;
+          index++;
         }
+      }
+
+      // Load all objects into scene
+      const loader = new ObjectLoader();
+      this.trees = loader.init(this.mesh);
+
+      this.loaded = true;
+    };
+    terrainImage.src = "../IMAGIN3D/assets/images/terrain.png";
+  }
+
+  num = 0;
+
+  update(dt) {
+    if (!this.loaded) return;
+
+    for (let i = 0; i < this.trees.length; i++) {
+      const tree = this.trees[i];
+      if (tree === undefined) return;
+      for (let i = 0; i < tree.children.length; i++) {
+        const leaf = tree.children[i];
+
+        leaf.material.rotation += (dt * Math.sin(this.num)) / 100;
+        this.num += dt;
+        leaf.material.needsUpdate = true;
+      }
     }
-
+  }
 }
-
-
-
